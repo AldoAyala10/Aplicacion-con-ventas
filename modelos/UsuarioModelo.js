@@ -1,7 +1,6 @@
 class Usuario{ 
-    //en JS la clase empiesa con un contructor
     constructor(data){
-        //console.log(data);
+        
         
         this.id=data.id;
         this.nombre=data.nombre;

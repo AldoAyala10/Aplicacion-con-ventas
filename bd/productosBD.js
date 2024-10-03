@@ -6,6 +6,20 @@ function validarDatosProducto(producto) {
     return producto.nombre != undefined && producto.proveedor != undefined && producto.codigo != undefined;
 }
 
+
+async function nuevoProducto(data) {
+    const { salt, hash } = encriptarCodigo(data.codigo);
+    data.codigo = hash;
+    data.salt = salt;
+    const producto1 = new Producto(data);
+
+    if (validarDatosProducto(producto1.getProducto)) {
+        await productosBD.doc().set(producto1.getProducto);
+        return true;
+    }
+    return false;
+}
+
 async function mostrarProductos() {
     const productos = await productosBD.get();
     productosValidos = [];
@@ -24,18 +38,7 @@ async function buscarProductoPorID(id) {
     return validarDatosProducto(producto1.getProducto) ? producto1.getProducto : null;
 }
 
-async function nuevoProducto(data) {
-    const { salt, hash } = encriptarCodigo(data.codigo);
-    data.codigo = hash;
-    data.salt = salt;
-    const producto1 = new Producto(data);
 
-    if (validarDatosProducto(producto1.getProducto)) {
-        await productosBD.doc().set(producto1.getProducto);
-        return true;
-    }
-    return false;
-}
 
 async function borrarProducto(id) {
     const productoValido = await buscarProductoPorID(id);
